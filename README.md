@@ -1,0 +1,1 @@
+# autotests-of-authorization-on-cypress
