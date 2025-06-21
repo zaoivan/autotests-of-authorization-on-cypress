@@ -1,7 +1,11 @@
 describe('Проверка авторизации', function () {
 
+   beforeEach('Начало теста', function () {
+         cy.visit('/');
+         cy.get('#forgotEmailButton').should('have.css', 'color', 'rgb(0, 85, 152)');
+           });
+
    it('Правильный логин и правильный пароль', function () { // позитивный кейс
-        cy.visit('/');
         cy.get('#mail').type('german@dolnikov.ru');
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
@@ -11,7 +15,6 @@ describe('Проверка авторизации', function () {
 
     })
        it('Восстановление пароля', function () { // позитивный кейс
-        cy.visit('/');
         cy.get('#forgotEmailButton').click();
         cy.get('#mailForgot').type('german@dolnikov.ru');
         cy.get('#restoreEmailButton').click();
@@ -20,7 +23,6 @@ describe('Проверка авторизации', function () {
     })
 
       it('Правильный логин и НЕправильный пароль', function () { // негативный кейс
-        cy.visit('/');
         cy.get('#mail').type('german@dolnikov.ru');
         cy.get('#pass').type('iLoveqastudio2'); // НЕправильный пароль
         cy.get('#loginButton').click();
@@ -29,7 +31,6 @@ describe('Проверка авторизации', function () {
         cy.get('#exitMessageButton > .exitIcon').should('be.visible');
     })
       it('НЕправильный логин и правильный пароль', function () { // негативный кейс
-        cy.visit('/');
         cy.get('#mail').type('ivan@dolnikov.ru'); // НЕправильный логин
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
@@ -39,7 +40,6 @@ describe('Проверка авторизации', function () {
     })
 
       it('Валидация на наличие @', function () { // негативный кейс
-        cy.visit('/');
         cy.get('#mail').type('germandolnikov.ru'); // логин без @
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
@@ -49,7 +49,6 @@ describe('Проверка авторизации', function () {
     })
 
     it('Проверка на приведение к строчным буквам в логине', function () {
-        cy.visit('/');
         cy.get('#mail').type('GerMan@Dolnikov.ru');
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
@@ -61,6 +60,17 @@ describe('Проверка авторизации', function () {
     })
  })
 
-
-
 // запуск через теринал: npx cypress run --spec cypress/e2e/login.cy.js --browser chrome
+// не мог запустить команду выше, терминал писал "Need to install ...", требовал обновить Cypress до последней версии v14...,
+// загуглил, gemini посоветовал в package.json было "cypress": "^12.7.0" - но это не помогло
+// помог copilot
+// Иногда помогает удалить node_modules и package-lock.json:
+// rm -rf node_modules package-lock.json
+// npm cache clean --force
+// npm install
+
+// git add . // проиндексировать все файлы
+// git commit -m "имя_коммита" // добавить комментарий для фиксации
+// git push // загрузить изменения с ноута в github
+
+
