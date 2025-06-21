@@ -1,65 +1,69 @@
+import * as data from "../helpers/default_data.json";
 import * as main_page from "../locators/main_page.json";
-import * as data from "../helpers/default_data.json"
+import * as result_page from "../locators/result_page.json";
+import * as recovery_page from "../locators/recovery_password_page.json";
 
 describe('Проверка авторизации', function () {
 
-   beforeEach('Начало теста', function () {
-         cy.visit('/');
-         cy.get('#forgotEmailButton').should('have.css', 'color', 'rgb(0, 85, 152)');
-           });
+  beforeEach('Начало теста', function () {
+    cy.visit('/');
+    cy.get(main_page.fogot_pass_btn).should('have.css', 'color', 'rgb(0, 85, 152)');
+  });
 
-   afterEach('Конец теста', function () {
-         cy.get('#exitMessageButton > .exitIcon').should('be.visible');
-        });
+  afterEach('Конец теста', function () {
+    cy.get(result_page.close).should('be.visible');
+  });
 
-   it('Правильный логин и правильный пароль', function () { // позитивный кейс
-        cy.get('#mail').type(data.login);
-        cy.get('#pass').type('iLoveqastudio1');
-        cy.get('#loginButton').click();
-        cy.get('#messageHeader').should('be.visible');
-        cy.get('#messageHeader').contains('Авторизация прошла успешно');
+  it('Правильный логин и правильный пароль', function () { // позитивный кейс
+    cy.get(main_page.email).type(data.login);
+    cy.get(main_page.password).type('iLoveqastudio1');
+    cy.get(main_page.login_button).click();
+    cy.get(result_page.title).should('be.visible');
+    cy.get(result_page.title).contains('Авторизация прошла успешно');
+  })
 
-    })
-       it('Восстановление пароля', function () { // позитивный кейс
-        cy.get('#forgotEmailButton').click();
-        cy.get('#mailForgot').type(data.login);
-        cy.get('#restoreEmailButton').click();
-        cy.get('#messageHeader').contains('Успешно отправили пароль на e-mail');
-    })
+  it('Правильный логин и НЕправильный пароль', function () { // негативный кейс
+    cy.get(main_page.email).type(data.login);
+    cy.get(main_page.password).type('iLoveqastudio2'); // НЕправильный пароль
+    cy.get(main_page.login_button).click();
+    cy.get(result_page.title).should('be.visible');
+    cy.get(result_page.title).contains('Такого логина или пароля нет');
+  })
 
-      it('Правильный логин и НЕправильный пароль', function () { // негативный кейс
-        cy.get('#mail').type(data.login);
-        cy.get('#pass').type('iLoveqastudio2'); // НЕправильный пароль
-        cy.get('#loginButton').click();
-        cy.get('#messageHeader').should('be.visible');
-        cy.get('#messageHeader').contains('Такого логина или пароля нет');
-    })
-      it('НЕправильный логин и правильный пароль', function () { // негативный кейс
-        cy.get('#mail').type('ivan@dolnikov.ru'); // НЕправильный логин
-        cy.get('#pass').type('iLoveqastudio1');
-        cy.get('#loginButton').click();
-        cy.get('#messageHeader').should('be.visible');
-        cy.get('#messageHeader').contains('Такого логина или пароля нет');
-    })
+  it('НЕправильный логин и правильный пароль', function () { // негативный кейс
+    cy.get(main_page.email).type('ivan@dolnikov.ru'); // НЕправильный логин
+    cy.get(main_page.password).type('iLoveqastudio1');
+    cy.get(main_page.login_button).click();
+    cy.get(result_page.title).should('be.visible');
+    cy.get(result_page.title).contains('Такого логина или пароля нет');
+  })
 
-      it('Валидация на наличие @', function () { // негативный кейс
-        cy.get('#mail').type('germandolnikov.ru'); // логин без @
-        cy.get('#pass').type('iLoveqastudio1');
-        cy.get('#loginButton').click();
-        cy.get('#messageHeader').should('be.visible');
-        cy.get('#messageHeader').contains('Нужно исправить проблему валидации');
-    })
+  it('Валидация на наличие @', function () { // негативный кейс
+    cy.get(main_page.email).type('germandolnikov.ru'); // логин без @
+    cy.get(main_page.password).type('iLoveqastudio1');
+    cy.get(main_page.login_button).click();
+    cy.get(result_page.title).should('be.visible');
+    cy.get(result_page.title).contains('Нужно исправить проблему валидации');
+  })
 
-    it('Проверка на приведение к строчным буквам в логине', function () {
-        cy.get('#mail').type(data.login);
-        cy.get('#pass').type('iLoveqastudio1');
-        cy.get('#loginButton').click();
-        cy.get('#messageHeader').should('be.visible');
-        cy.get('#messageHeader').contains('Авторизация прошла успешно');
-        //Разработчик допустил баг в этом месте и не реализовал пункт #2 из требований.
-        //Тест должен упасть — и это ок (то есть мы этим тестом поймали баг, который допустил разработчик
-    })
- })
+  it('Проверка на приведение к строчным буквам в логине', function () {
+    cy.get(main_page.email).type('German@Dolnikov.ru');
+    cy.get(main_page.password).type('iLoveqastudio1');
+    cy.get(main_page.login_button).click();
+    cy.get(result_page.title).should('be.visible');
+    cy.get(result_page.title).contains('Авторизация прошла успешно');
+    //Разработчик допустил баг в этом месте и не реализовал пункт #2 из требований.
+    //Тест должен упасть — и это ок (то есть мы этим тестом поймали баг, который допустил разработчик
+  })
+
+  it('Восстановление пароля', function () { // позитивный кейс
+    cy.get(main_page.fogot_pass_btn).click();
+    cy.get(recovery_page.email).type(data.login);
+    cy.get(recovery_page.send_button).click();
+    cy.get(result_page.title).should('be.visible');
+    cy.get(result_page.title).contains('Успешно отправили пароль на e-mail');
+  })
+})
 
 // запуск через теринал: npx cypress run --spec cypress/e2e/login.cy.js --browser chrome
 
