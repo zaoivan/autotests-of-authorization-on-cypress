@@ -1,3 +1,6 @@
+import * as main_page from "../locators/main_page.json";
+import * as data from "../helpers/default_data.json"
+
 describe('Проверка авторизации', function () {
 
    beforeEach('Начало теста', function () {
@@ -10,7 +13,7 @@ describe('Проверка авторизации', function () {
         });
 
    it('Правильный логин и правильный пароль', function () { // позитивный кейс
-        cy.get('#mail').type('german@dolnikov.ru');
+        cy.get('#mail').type(data.login);
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
         cy.get('#messageHeader').should('be.visible');
@@ -19,13 +22,13 @@ describe('Проверка авторизации', function () {
     })
        it('Восстановление пароля', function () { // позитивный кейс
         cy.get('#forgotEmailButton').click();
-        cy.get('#mailForgot').type('german@dolnikov.ru');
+        cy.get('#mailForgot').type(data.login);
         cy.get('#restoreEmailButton').click();
         cy.get('#messageHeader').contains('Успешно отправили пароль на e-mail');
     })
 
       it('Правильный логин и НЕправильный пароль', function () { // негативный кейс
-        cy.get('#mail').type('german@dolnikov.ru');
+        cy.get('#mail').type(data.login);
         cy.get('#pass').type('iLoveqastudio2'); // НЕправильный пароль
         cy.get('#loginButton').click();
         cy.get('#messageHeader').should('be.visible');
@@ -48,7 +51,7 @@ describe('Проверка авторизации', function () {
     })
 
     it('Проверка на приведение к строчным буквам в логине', function () {
-        cy.get('#mail').type('GerMan@Dolnikov.ru');
+        cy.get('#mail').type(data.login);
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
         cy.get('#messageHeader').should('be.visible');
