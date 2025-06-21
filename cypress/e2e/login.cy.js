@@ -1,7 +1,7 @@
 describe('Проверка авторизации', function () {
 
    it('Правильный логин и правильный пароль', function () { // позитивный кейс
-        cy.visit('https://login.qa.studio/');
+        cy.visit('/');
         cy.get('#mail').type('german@dolnikov.ru');
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
@@ -11,7 +11,7 @@ describe('Проверка авторизации', function () {
 
     })
        it('Восстановление пароля', function () { // позитивный кейс
-        cy.visit('https://login.qa.studio/');
+        cy.visit('/');
         cy.get('#forgotEmailButton').click();
         cy.get('#mailForgot').type('german@dolnikov.ru');
         cy.get('#restoreEmailButton').click();
@@ -20,7 +20,7 @@ describe('Проверка авторизации', function () {
     })
 
       it('Правильный логин и НЕправильный пароль', function () { // негативный кейс
-        cy.visit('https://login.qa.studio/');
+        cy.visit('/');
         cy.get('#mail').type('german@dolnikov.ru');
         cy.get('#pass').type('iLoveqastudio2'); // НЕправильный пароль
         cy.get('#loginButton').click();
@@ -29,7 +29,7 @@ describe('Проверка авторизации', function () {
         cy.get('#exitMessageButton > .exitIcon').should('be.visible');
     })
       it('НЕправильный логин и правильный пароль', function () { // негативный кейс
-        cy.visit('https://login.qa.studio/');
+        cy.visit('/');
         cy.get('#mail').type('ivan@dolnikov.ru'); // НЕправильный логин
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
@@ -39,7 +39,7 @@ describe('Проверка авторизации', function () {
     })
 
       it('Валидация на наличие @', function () { // негативный кейс
-        cy.visit('https://login.qa.studio/');
+        cy.visit('/');
         cy.get('#mail').type('germandolnikov.ru'); // логин без @
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
@@ -49,7 +49,7 @@ describe('Проверка авторизации', function () {
     })
 
     it('Проверка на приведение к строчным буквам в логине', function () {
-        cy.visit('https://login.qa.studio/');
+        cy.visit('/');
         cy.get('#mail').type('GerMan@Dolnikov.ru');
         cy.get('#pass').type('iLoveqastudio1');
         cy.get('#loginButton').click();
@@ -63,4 +63,4 @@ describe('Проверка авторизации', function () {
 
 
 
-// запуск через теринал: npx cypress run --spec cypress/e2e/poke.cy.js --browser chrome
+// запуск через теринал: npx cypress run --spec cypress/e2e/login.cy.js --browser chrome
